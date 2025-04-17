@@ -9,7 +9,7 @@ on:
 
 jobs:
   read_env:
-    runs-on: ubuntu-latest
+    runs-on: Master_Linux_WB_CI_PoC
     outputs:
       env_value: ${{ steps.get_env.outputs.env_value }}
     steps:
