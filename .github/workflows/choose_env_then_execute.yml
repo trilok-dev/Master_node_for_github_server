@@ -1,0 +1,41 @@
+name: Run workflow on required env
+on: 
+  workflow_dispatch:
+    inputs:
+      target_file:
+        description: 'Enter the file to read execution_env from (e.g., script.py)'
+        required: true
+        default: 'script.py'
+
+jobs:
+  read_env:
+    runs-on: ubuntu-latest
+    outputs:
+      env_value: ${{ steps.get_env.outputs.env_value }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Read execution_env from user-specified file
+        id: get_env
+        run: |
+          echo "Reading from: ${{ github.event.inputs.target_file }}"
+          value=$(grep -oP 'execution_env\s*=\s*["'\'']\K[^"'\'']+' "${{ github.event.inputs.target_file }}")
+          if [ -z "$value" ]; then
+            echo "Error: execution_env not found in file"
+            exit 1
+          fi
+          echo "env_value=$value" >> $GITHUB_OUTPUT
+
+  run_job:
+    needs: read_env
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    if: needs.read_env.outputs.env_value == matrix.os
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Echo execution env
+        run: echo "Running on ${{ matrix.os }} because execution_env=${{ needs.read_env.outputs.env_value }}"
+
+    
