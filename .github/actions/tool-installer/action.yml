@@ -1,5 +1,6 @@
 name: Tool Installer
-description: Dynamically dispatches to appropriate tool setup
+description: Installs a tool with optional version
+
 inputs:
   tool:
     required: true
@@ -9,14 +10,5 @@ inputs:
 runs:
   using: composite
   steps:
-    - id: resolve
-      run: |
-        echo "TOOL=${{ inputs.tool }}" >> $GITHUB_OUTPUT
-        echo "VERSION=${{ inputs.version }}" >> $GITHUB_OUTPUT
-        echo "TOOL_PATH=.github/actions/tool-installer/tools/${{ inputs.tool }}.yml" >> $GITHUB_OUTPUT
+    - run: ./install.sh "${{ inputs.tool }}" "${{ inputs.version }}"
       shell: bash
-
-    - name: Run Tool Installer
-      uses: ./.github/actions/tool-installer/tools/${{ steps.resolve.outputs.TOOL }}.yml
-      with:
-        version: ${{ steps.resolve.outputs.VERSION }}
