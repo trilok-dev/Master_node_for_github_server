@@ -15,7 +15,7 @@ jobs:
       python: ${{ steps.get_env.outputs.python }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Read execution_env from specified file
         id: get_env
         run: |
@@ -42,7 +42,7 @@ jobs:
     if: ${{ needs.read_env.outputs.env_value }} == Window_WB_CI_PoC
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Echo inputs
         run: echo "Running on execution_env=${{ needs.read_env.outputs.env_value }} and python is installed=${{ needs.read_env.outputs.python }} "
       - name: Install tools
