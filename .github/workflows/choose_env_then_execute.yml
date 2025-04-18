@@ -41,10 +41,11 @@ jobs:
     runs-on: ${{ needs.read_env.outputs.env_value }}
     if: ${{ needs.read_env.outputs.env_value }} == Window_WB_CI_PoC
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+
       - name: Echo inputs
         run: echo "Running on execution_env=${{ needs.read_env.outputs.env_value }} and python is installed=${{ needs.read_env.outputs.python }} "
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Install tools
         uses: ./.github/actions/windows_tool_installation/action.yml
         with:
