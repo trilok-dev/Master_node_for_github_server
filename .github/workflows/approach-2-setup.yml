@@ -1,0 +1,29 @@
+name: Setup Workbench (Dynamic Tools)
+
+on:
+  workflow_dispatch:
+    inputs:
+      os:
+        description: OS to run on
+        type: choice
+        default: ubuntu
+        options: [ubuntu, windows]
+      tools:
+        description: 'JSON array'
+        required: true
+        default: '[{"tool":"python","version":"3.10"},{"tool":"node","version":"18"},{"tool":"matlab"}]'
+
+jobs:
+  setup:
+    runs-on: ${{ inputs.os }}-latest
+    strategy:
+      matrix: ${{ fromJson(inputs.tools) }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ${{ matrix.tool }}
+        uses: ./.github/actions/tool-installer
+        with:
+          tool: ${{ matrix.tool }}
+          version: ${{ matrix.version || '' }}
