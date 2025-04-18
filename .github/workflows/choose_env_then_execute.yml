@@ -9,14 +9,13 @@ on:
 
 jobs:
   read_env:
-    runs-on: ubuntu-latest
+    runs-on: Master_Linux_WB_CI_PoC
     outputs:
       env_value: ${{ steps.get_env.outputs.env_value }}
       python: ${{ steps.get_env.outputs.python }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Read execution_env from specified file
         id: get_env
         run: |
@@ -37,13 +36,19 @@ jobs:
           echo "env_value=$value" >> $GITHUB_OUTPUT
           echo "python=$python" >> $GITHUB_OUTPUT
 
-  run_job:
+  install_tools_windows:
     needs: read_env
-    # strategy:
-      # matrix:
-      #   os: [Linux_WB_CI_POC,Window_WB_CI_PoC]
-    # if: needs.read_env.outputs.env_value == matrix.os
     runs-on: ${{ needs.read_env.outputs.env_value }}
+    if: ${{ needs.read_env.outputs.env_value }} == Window_WB_CI_PoC
     steps:
-      - name: Echo execution env
+      - env:
+          python: ${{ needs.read_env.outputs.python }}
+      - name: Echo inputs
         run: echo "Running on execution_env=${{ needs.read_env.outputs.env_value }} and python is installed=${{ needs.read_env.outputs.python }} "
+      - name: Install tools
+        uses: ./.github/workflows/windows_tool_installation.yml
+        with:
+          python: $python
+          
+      - name: Execute python script
+        run: python script.py
