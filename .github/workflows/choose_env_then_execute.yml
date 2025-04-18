@@ -31,11 +31,11 @@ jobs:
 
   run_job:
     needs: read_env
-    strategy:
-      matrix:
-        os: [Linux_WB_CI_POC,Window_WB_CI_PoC]
-    if: needs.read_env.outputs.env_value == matrix.os
-    runs-on: ${{ matrix.os }}
+    # strategy:
+      # matrix:
+      #   os: [Linux_WB_CI_POC,Window_WB_CI_PoC]
+    # if: needs.read_env.outputs.env_value == matrix.os
+    runs-on: ${{ needs.read_env.outputs.env_value }}
     steps:
       - name: Echo execution env
-        run: echo "Running on ${{ matrix.os }} because execution_env=${{ needs.read_env.outputs.env_value }}"
+        run: echo "Running on execution_env=${{ needs.read_env.outputs.env_value }}"
