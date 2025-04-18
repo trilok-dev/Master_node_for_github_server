@@ -11,6 +11,7 @@ on:
       tools:
         description: 'JSON array of tools (e.g. [{"tool":"python","version":"3.10"}])'
         required: true
+        default: '[{"tool":"python","version":"3.10"},{"tool":"node","version":"18"},{"tool":"matlab"}]'
 
 jobs:
   setup:
