@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       env_value: ${{ steps.get_env.outputs.env_value }}
+      python: ${{ steps.get_env.outputs.python }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,11 +24,18 @@ jobs:
           # Extract the value using grep and sed
           value=$(grep execution_env "${{ github.event.inputs.target_file }}" | sed -E 's/.*execution_env\s*=\s*[\"\x27]?([^\"\x27]+)[\"\x27]?.*/\1/')
           echo "Extracted value: $value"
+          python=$(grep execution_env "${{ github.event.inputs.target_file }}" | sed -E 's/.*execution_env\s*=\s*[\"\x27]?([^\"\x27]+)[\"\x27]?.*/\1/')
+          echo "Python value: $python"
           if [ -z "$value" ]; then
             echo "Error: execution_env not found in file"
             exit 1
           fi
+          if [ -z "$python" ]; then
+            echo "Error: python not found in file"
+            exit 1
+          fi
           echo "env_value=$value" >> $GITHUB_OUTPUT
+          echo "python=$python" >> $GITHUB_OUTPUT
 
   run_job:
     needs: read_env
@@ -38,4 +46,4 @@ jobs:
     runs-on: ${{ needs.read_env.outputs.env_value }}
     steps:
       - name: Echo execution env
-        run: echo "Running on execution_env=${{ needs.read_env.outputs.env_value }}"
+        run: echo "Running on execution_env=${{ needs.read_env.outputs.env_value }} and python is installed=${{ needs.read_env.outputs.python }} "
