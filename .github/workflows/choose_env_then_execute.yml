@@ -24,7 +24,7 @@ jobs:
           # Extract the value using grep and sed
           value=$(grep execution_env "${{ github.event.inputs.target_file }}" | sed -E 's/.*execution_env\s*=\s*[\"\x27]?([^\"\x27]+)[\"\x27]?.*/\1/')
           echo "Extracted value: $value"
-          python=$(grep execution_env "${{ github.event.inputs.target_file }}" | sed -E 's/.*python\s*=\s*[\"\x27]?([^\"\x27]+)[\"\x27]?.*/\1/')
+          python=$(grep python "${{ github.event.inputs.target_file }}" | sed -E 's/.*python\s*=\s*[\"\x27]?([^\"\x27]+)[\"\x27]?.*/\1/')
           echo "Python value: $python"
           if [ -z "$value" ]; then
             echo "Error: execution_env not found in file"
