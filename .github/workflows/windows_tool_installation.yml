@@ -1,0 +1,35 @@
+name: Tool Installation on Windows Env
+on:
+  workflow_call:
+    inputs:
+      python:
+        description: "Should Python be installed? (y/n)"
+        required: true
+        type: string
+
+defaults:
+  run: 
+    shell: bash
+
+jobs:
+  check-python-windows:
+    runs-on: Window_WB_CI_PoC
+    steps:
+      - name: Check Python Requirement
+        if: inputs.python == 'y'
+        run: |
+          echo "Python is required. Checking if it's installed..."
+          if command -v python &>nul
+          then
+            echo "Python is already installed:"
+            python --version
+          else
+            echo "Python not found. Installing Python..."
+            # choco install -y python
+            # refreshenv
+            # python --version
+          fi
+
+      - name: Skip Python Installation
+        if: inputs.python == 'n'
+        run: echo "Python is not required."
