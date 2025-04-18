@@ -10,5 +10,5 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: .github/actions/tool-installer/install.sh "${{ inputs.tool }}" "${{ inputs.version }}"
+    - run: ./.github/actions/tool-installer/install.sh "${{ inputs.tool }}" "${{ inputs.version }}"
       shell: bash
