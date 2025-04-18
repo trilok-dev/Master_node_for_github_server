@@ -41,14 +41,12 @@ jobs:
     runs-on: ${{ needs.read_env.outputs.env_value }}
     if: ${{ needs.read_env.outputs.env_value }} == Window_WB_CI_PoC
     steps:
-      - env:
-          python: ${{ needs.read_env.outputs.python }}
       - name: Echo inputs
         run: echo "Running on execution_env=${{ needs.read_env.outputs.env_value }} and python is installed=${{ needs.read_env.outputs.python }} "
       - name: Install tools
         uses: ./.github/workflows/windows_tool_installation.yml
         with:
-          python: $python
+          python: ${{ needs.read_env.outputs.python }}
           
       - name: Execute python script
         run: python script.py
