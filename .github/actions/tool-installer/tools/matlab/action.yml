@@ -1,0 +1,12 @@
+name: Install MATLAB
+description: MATLAB placeholder install
+inputs:
+  version:
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Setup MATLAB
+      run: echo "Installing MATLAB (no real setup action)"
+      shell: bash
