@@ -1,6 +1,5 @@
 name: Tool Installer
-description: Installs a tool with optional version
-
+description: Dispatch to tool installers
 inputs:
   tool:
     required: true
@@ -8,7 +7,25 @@ inputs:
     required: false
 
 runs:
-  using: composite
+  using: "composite"
   steps:
-    - run: ./.github/actions/tool-installer/install.sh "${{ inputs.tool }}" "${{ inputs.version }}"
-      shell: bash
+    - name: Checkout source
+      uses: actions/checkout@v3
+
+    - name: Install Python
+      if: ${{ inputs.tool == 'python' }}
+      uses: ./.github/actions/tool-installer/tools/python
+      with:
+        version: ${{ inputs.version }}
+
+    - name: Install Node.js
+      if: ${{ inputs.tool == 'node' }}
+      uses: ./.github/actions/tool-installer/tools/node
+      with:
+        version: ${{ inputs.version }}
+
+    - name: Install MATLAB
+      if: ${{ inputs.tool == 'matlab' }}
+      uses: ./.github/actions/tool-installer/tools/matlab
+      with:
+        version: ${{ inputs.version }}
