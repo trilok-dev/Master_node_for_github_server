@@ -9,7 +9,8 @@ on:
 
 jobs:
   read_env:
-    runs-on: Master_Linux_WB_CI_PoC
+    # runs-on: Master_Linux_WB_CI_PoC
+    runs-on: ubuntu-latest
     outputs:
       env_value: ${{ steps.get_env.outputs.env_value }}
       python: ${{ steps.get_env.outputs.python }}
@@ -38,7 +39,8 @@ jobs:
 
   install_tools_windows:
     needs: read_env
-    runs-on: ${{ needs.read_env.outputs.env_value }}
+    # runs-on: ${{ needs.read_env.outputs.env_value }}
+    runs-on: windows-latest
     if: ${{ needs.read_env.outputs.env_value }} == Window_WB_CI_PoC
     steps:
 
