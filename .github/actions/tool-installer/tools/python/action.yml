@@ -1,0 +1,13 @@
+name: Install Python
+description: Installs Python
+inputs:
+  version:
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.version }}
