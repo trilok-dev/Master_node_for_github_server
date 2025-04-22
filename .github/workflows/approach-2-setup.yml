@@ -11,7 +11,7 @@ on:
       tools:
         description: 'JSON array'
         required: true
-        default: '[{"tool":"python","version":"3.10"},{"tool":"node","version":"18"},{"tool":"matlab"}]'
+        default: '[{"tool":"python","version":"3.10"},{"tool":"node","version":"18"}]'
 
 jobs:
   setup:
