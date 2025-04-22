@@ -1,17 +1,29 @@
 #!/bin/bash
 set -e
 
-tool=$1
-version=$2
+TOOL=$1
+VERSION=$2
 
-echo "Installing $tool ${version:-default}..."
+TOOL_PATH=".github/actions/tool-installer/tools/${TOOL}.yml"
 
-script_dir="$(dirname "$0")/installers"
-installer="$script_dir/install-${tool}.sh"
+if [[ ! -f "$TOOL_PATH" ]]; then
+  echo " Tool installer not found: $TOOL_PATH"
+  exit 1
+fi
 
 if [[ -f "$installer" ]]; then
+  chmod +x "$installer"
   bash "$installer" "$version"
 else
   echo "Unsupported tool: $tool"
   exit 1
 fi
+
+
+echo " Installing $TOOL (version: ${VERSION:-latest}) "
+
+# Simulate dynamic usage by printing usage block
+echo "::notice title=Tool::$TOOL"
+echo "::notice title=Version::$VERSION"
+echo "::notice title=Resolved File::$TOOL_PATH"
+
