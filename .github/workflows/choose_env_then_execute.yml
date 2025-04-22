@@ -47,7 +47,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Install tools
-        uses: ./.github/actions/windows_tool_installation/action.yml
+        uses: ./.github/actions/windows_tool_installation/
         with:
           python: ${{ needs.read_env.outputs.python }}
           
