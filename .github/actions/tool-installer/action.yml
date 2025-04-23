@@ -1,5 +1,5 @@
 name: Tool Installer
-description: Dispatch to tool installers
+description: Dynamically dispatch to tool installers
 inputs:
   tool:
     required: true
@@ -9,23 +9,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout source
-      uses: actions/checkout@v3
+    - name: Validate Tool Action Exists
+      shell: bash
+      run: |
+        TOOL_PATH=".github/actions/tool-installer/tools/${{ inputs.tool }}/action.yml"
+        if [[ ! -f "$TOOL_PATH" ]]; then
+          echo "❌ Tool installer not found: $TOOL_PATH"
+          exit 1
+        fi
+        echo "✅ Found installer for ${{ inputs.tool }}"
 
-    - name: Install Python
-      if: ${{ inputs.tool == 'python' }}
-      uses: ./.github/actions/tool-installer/tools/python
+    - name: Run Tool Installer
+      uses: ./.github/actions/tool-installer/tools/${{ inputs.tool }}
       with:
         version: ${{ inputs.version }}
-
-    - name: Install Node.js
-      if: ${{ inputs.tool == 'node' }}
-      uses: ./.github/actions/tool-installer/tools/node
-      with:
-        version: ${{ inputs.version }}
-
-    - name: Install MATLAB
-      if: ${{ inputs.tool == 'matlab' }}
-      uses: ./.github/actions/tool-installer/tools/matlab
-      with:
-        version: ${{ inputs.version }}   
