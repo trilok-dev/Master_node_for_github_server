@@ -1,5 +1,6 @@
 name: Tool Installer
-description: Dynamically dispatch to tool installers
+description: Dynamically dispatch tool installers
+
 inputs:
   tool:
     required: true
@@ -9,17 +10,31 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Validate Tool Action Exists
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+
+    - name: Install Tool
       shell: bash
       run: |
-        TOOL_PATH=".github/actions/tool-installer/tools/${{ inputs.tool }}/action.yml"
-        if [[ ! -f "$TOOL_PATH" ]]; then
-          echo "❌ Tool installer not found: $TOOL_PATH"
+        TOOL="${{ inputs.tool }}"
+        VERSION="${{ inputs.version }}"
+        
+        echo "🔧 Installing $TOOL (version: ${VERSION:-latest})"
+
+        # Define the base path for tool installers
+        BASE_INSTALLER_PATH=".github/actions/tool-installer/tools"
+
+        # Construct the path dynamically
+        TOOL_INSTALLER_PATH="${BASE_INSTALLER_PATH}/${TOOL}/action.yml"
+
+        # Check if the tool installer exists
+        if [[ ! -f "$TOOL_INSTALLER_PATH" ]]; then
+          echo "Installer not found for tool: $TOOL"
           exit 1
         fi
-        echo "✅ Found installer for ${{ inputs.tool }}"
 
-    - name: Run Tool Installer
-      uses: ./.github/actions/tool-installer/tools/${{ inputs.tool }}
-      with:
-        version: ${{ inputs.version }}
+        echo "Found installer for $TOOL at $TOOL_INSTALLER_PATH"
+
+        # Call the tool-specific installer dynamically
+        echo "Running the installer for $TOOL..."
+        uses: $TOOL_INSTALLER_PATH
