@@ -37,4 +37,4 @@ runs:
 
         # Call the tool-specific installer dynamically
         echo "Running the installer for $TOOL..."
-        uses: $TOOL_INSTALLER_PATH
+        bash "$TOOL_INSTALLER_PATH" "$VERSION"
