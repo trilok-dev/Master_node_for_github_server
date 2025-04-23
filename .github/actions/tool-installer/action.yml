@@ -1,6 +1,5 @@
 name: Tool Installer
-description: Dynamically dispatch tool installers
-
+description: Dispatch to tool installers
 inputs:
   tool:
     required: true
@@ -10,32 +9,23 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v4
+    - name: Checkout source
+      uses: actions/checkout@v3
 
-    - name: Install Tool
-      shell: bash
-      run: |
-        TOOL="${{ inputs.tool }}"
-        VERSION="${{ inputs.version }}"
-        
-        echo "🔧 Installing $TOOL (version: ${VERSION:-latest})"
+    - name: Install Python
+      if: ${{ inputs.tool == 'python' }}
+      uses: ./.github/actions/tool-installer/tools/python
+      with:
+        version: ${{ inputs.version }}
 
-        # Define the base path for tool installers
-        BASE_INSTALLER_PATH=".github/actions/tool-installer/tools"
+    - name: Install Node.js
+      if: ${{ inputs.tool == 'node' }}
+      uses: ./.github/actions/tool-installer/tools/node
+      with:
+        version: ${{ inputs.version }}
 
-        # Construct the path dynamically
-        TOOL_INSTALLER_PATH="${BASE_INSTALLER_PATH}/${TOOL}/action.yml"
-
-        # Check if the tool installer exists
-        if [[ ! -f "$TOOL_INSTALLER_PATH" ]]; then
-          echo "❌ Installer not found for tool: $TOOL"
-          exit 1
-        fi
-
-        echo "✅ Found installer for $TOOL at $TOOL_INSTALLER_PATH"
-
-        # Use the GitHub Action to run the tool installer directly
-        # This is the key part, using the `uses` directive correctly within YAML
-        echo "Running the installer for $TOOL..."
-      uses: $TOOL_INSTALLER_PATH
+    - name: Install MATLAB
+      if: ${{ inputs.tool == 'matlab' }}
+      uses: ./.github/actions/tool-installer/tools/matlab
+      with:
+        version: ${{ inputs.version }}
