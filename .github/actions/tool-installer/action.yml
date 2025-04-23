@@ -29,12 +29,13 @@ runs:
 
         # Check if the tool installer exists
         if [[ ! -f "$TOOL_INSTALLER_PATH" ]]; then
-          echo "Installer not found for tool: $TOOL"
+          echo "❌ Installer not found for tool: $TOOL"
           exit 1
         fi
 
-        echo "Found installer for $TOOL at $TOOL_INSTALLER_PATH"
+        echo "✅ Found installer for $TOOL at $TOOL_INSTALLER_PATH"
 
-        # Call the tool-specific installer dynamically
+        # Use the GitHub Action to run the tool installer directly
+        # This is the key part, using the `uses` directive correctly within YAML
         echo "Running the installer for $TOOL..."
-        bash "$TOOL_INSTALLER_PATH" "$VERSION"
+        uses: $TOOL_INSTALLER_PATH
