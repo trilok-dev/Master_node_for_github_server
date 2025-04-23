@@ -1,5 +1,5 @@
 name: Tool Installer
-description: Installs a tool based on input
+description: Dispatch to tool installers
 inputs:
   tool:
     required: true
@@ -14,18 +14,18 @@ runs:
 
     - name: Install Python
       if: ${{ inputs.tool == 'python' }}
-      uses: ../tool-installer/tools/python
+      uses: ./.github/actions/tool-installer/tools/python
       with:
         version: ${{ inputs.version }}
 
-    - name: Install Node
+    - name: Install Node.js
       if: ${{ inputs.tool == 'node' }}
-      uses: ../tool-installer/tools/node
+      uses: ./.github/actions/tool-installer/tools/node
       with:
         version: ${{ inputs.version }}
 
     - name: Install MATLAB
       if: ${{ inputs.tool == 'matlab' }}
-      uses: ../tool-installer/tools/matlab
+      uses: ./.github/actions/tool-installer/tools/matlab
       with:
-        version: ${{ inputs.version }}
+        version: ${{ inputs.version }}   
