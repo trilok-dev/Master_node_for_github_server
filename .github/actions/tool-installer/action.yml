@@ -1,11 +1,9 @@
 name: Tool Installer
-description: Dispatches to specific tool installers dynamically
+description: Installs a tool based on input
 inputs:
   tool:
-    description: Tool name to install (e.g. python, node, matlab)
     required: true
   version:
-    description: Version of the tool (optional)
     required: false
 
 runs:
@@ -14,18 +12,20 @@ runs:
     - name: Checkout source
       uses: actions/checkout@v3
 
-    - name: Validate tool exists
-      shell: bash
-      run: |
-        TOOL="${{ inputs.tool }}"
-        INSTALLER_PATH=".github/actions/tool-installer/tools/$TOOL/action.yml"
+    - name: Install Python
+      if: ${{ inputs.tool == 'python' }}
+      uses: ../tool-installer/tools/python
+      with:
+        version: ${{ inputs.version }}
 
-        if [[ ! -f "$INSTALLER_PATH" ]]; then
-          echo "::error::Installer for tool '$TOOL' not found at $INSTALLER_PATH"
-          exit 1
-        fi
+    - name: Install Node
+      if: ${{ inputs.tool == 'node' }}
+      uses: ../tool-installer/tools/node
+      with:
+        version: ${{ inputs.version }}
 
-    - name: Install Tool
-      uses: ./.github/actions/tool-installer/tools/${{ inputs.tool }}
+    - name: Install MATLAB
+      if: ${{ inputs.tool == 'matlab' }}
+      uses: ../tool-installer/tools/matlab
       with:
         version: ${{ inputs.version }}
