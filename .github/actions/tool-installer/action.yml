@@ -13,20 +13,20 @@ runs:
       uses: actions/checkout@v3
 
     - name: Install Python
-      if: ${{ inputs.tool == 'python' }}
+      # if: ${{ inputs.tool == 'python' }}
       # uses: ./.github/actions/tool-installer/tools/python
       uses: ./.github/actions/tool-installer/tools/${{ inputs.tool }}
       with:
         version: ${{ inputs.version }}
 
-    - name: Install Node.js
-      if: ${{ inputs.tool == 'node' }}
-      uses: ./.github/actions/tool-installer/tools/node
-      with:
-        version: ${{ inputs.version }}
+    # - name: Install Node.js
+    #   if: ${{ inputs.tool == 'node' }}
+    #   uses: ./.github/actions/tool-installer/tools/node
+    #   with:
+    #     version: ${{ inputs.version }}
 
-    - name: Install MATLAB
-      if: ${{ inputs.tool == 'matlab' }}
-      uses: ./.github/actions/tool-installer/tools/matlab
-      with:
-        version: ${{ inputs.version }}
+    # - name: Install MATLAB
+    #   if: ${{ inputs.tool == 'matlab' }}
+    #   uses: ./.github/actions/tool-installer/tools/matlab
+    #   with:
+    #     version: ${{ inputs.version }}
