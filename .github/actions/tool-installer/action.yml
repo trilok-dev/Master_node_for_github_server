@@ -14,7 +14,8 @@ runs:
 
     - name: Install Python
       if: ${{ inputs.tool == 'python' }}
-      uses: ./.github/actions/tool-installer/tools/python
+      # uses: ./.github/actions/tool-installer/tools/python
+      uses: ./.github/actions/tool-installer/tools/${{ inputs.tool }}
       with:
         version: ${{ inputs.version }}
 
